@@ -1,0 +1,24 @@
+using sysbus
+mach create "stm32f407-showcase"
+
+path add $ORIGIN
+
+machine LoadPlatformDescription $ORIGIN/stm32f407.repl
+
+$bin ?= $ORIGIN/../build/firmware.elf
+
+macro reset
+"""
+    sysbus LoadELF $bin
+"""
+
+runMacro $reset
+
+showAnalyzer usart2
+
+emulation SetGlobalQuantum "0.00001"
+
+logLevel -1 usart2
+logLevel 2 sysbus
+
+start
